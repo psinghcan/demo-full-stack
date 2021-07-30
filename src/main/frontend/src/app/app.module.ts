@@ -1,7 +1,9 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { HttpClientModule} from '@angular/common/http';
+import { InjectableRxStompConfig, RxStompService, rxStompServiceFactory } from '@stomp/ng2-stompjs';
 
-import { AppRoutingModule } from './app-routing.module';
+import { myRxStompConfig } from './rx-stomp.config';
 import { AppComponent } from './app.component';
 
 @NgModule({
@@ -10,9 +12,17 @@ import { AppComponent } from './app.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    HttpClientModule
   ],
-  providers: [],
+  providers: [{
+    provide: InjectableRxStompConfig,
+    useValue: myRxStompConfig
+  },
+    {
+      provide: RxStompService,
+      useFactory: rxStompServiceFactory,
+      deps: [InjectableRxStompConfig]
+    }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
